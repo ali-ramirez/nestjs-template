@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # Production service
+  my-service-production:
+    container_name: my-service-production
+    build:
+      target: production
+      context: .
+      args:
+        - PORT=${PORT_PROD:-3000}
+    ports:
+      - "${PORT_PROD:-3000}:${PORT_PROD:-3000}"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    env_file: .env.production
+
+
+  # Development service
+  my-service-dev:
+    container_name: my-service-dev
+    restart: unless-stopped
+    env_file: .env.development
+    build:
+      target: dev
+      context: .
+      args:
+        - PORT=${PORT_DEV:-3000}
+    ports:
+      - "${PORT_DEV:-3001}:${PORT_DEV:-3000}"
+      - "9229:9229" # Debugger port
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+
+  # Test service
+  my-service-test:
+    container_name: my-service-test
+    env_file: .env.test
+    build:
+      target: test
+      context: .
+    ports:
+      - "${PORT_TEST:-3002}:${PORT_TEST:-3002}"
+    environment:
+      - NODE_ENV=test
+    volumes:
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - /app/node_modules # Monta node_modules solo si existe para evitar sobrescribirlo
+    command: ["npm", "run", "test"]

@@ -1,12 +1,11 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { FastifyRequest } from 'fastify'; 
+import { FastifyRequest } from 'fastify';
 import { logger } from '../logging/config/logger.config';
-
 
 @Injectable()
 export class CorrelationIdInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest<FastifyRequest>();
     const correlationId = request.headers['X-Correlation-Id'] as string;
 

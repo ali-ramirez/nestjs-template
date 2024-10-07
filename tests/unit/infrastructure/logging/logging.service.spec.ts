@@ -11,7 +11,7 @@ vi.mock('@/infrastructure/logging/config/logger.config', () => ({
     warn: vi.fn(),
     debug: vi.fn(),
     verbose: vi.fn(),
-  }
+  },
 }));
 
 describe('LoggingService', () => {

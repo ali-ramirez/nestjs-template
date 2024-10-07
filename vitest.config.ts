@@ -3,21 +3,18 @@ import swc from 'unplugin-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { createVitestTestConfig } from './create-vitest-test-config';
 
-
 export default defineConfig({
   test: createVitestTestConfig('(unit|e2e)'),
   plugins: [
-     // This is required to build the test files with SWC
-      swc.vite({
-      // Explicitly set the module type to avoid inheriting this value from a `.swcrc` config file
+    swc.vite({
       module: { type: 'es6' },
     }),
-    tsconfigPaths()
+    tsconfigPaths(),
   ],
   resolve: {
     alias: {
       '@': 'src',
-      '@tests': 'tests'
-    }
+      '@tests': 'tests',
+    },
   },
 });

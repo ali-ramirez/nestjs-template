@@ -19,7 +19,7 @@ async function createLogDirectory() {
 }
 
 // Asegurarse de que la carpeta de logs exista
-await createLogDirectory().catch(err => {
+await createLogDirectory().catch((err) => {
   console.error('Error creando la carpeta de logs:', err);
 });
 
@@ -29,7 +29,7 @@ export const logger = createLogger({
   format: format.combine(
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     format.errors({ stack: true }),
-    format.json()
+    format.json(),
   ),
   defaultMeta: { service: 'my-service-name' },
   transports: [
@@ -54,7 +54,7 @@ export const logger = createLogger({
             message: info.message,
             stack: info.stack || null, // Stack trace si es error
           });
-        })
+        }),
       ),
     }),
     new DailyRotateFile({
@@ -78,7 +78,7 @@ export const logger = createLogger({
             message: info.message,
             stack: info.stack,
           });
-        })
+        }),
       ),
     }),
     new transports.Console({
@@ -88,7 +88,7 @@ export const logger = createLogger({
         format.printf(({ level, message, timestamp }) => {
           return `[${timestamp}] ${level}: ${message}`;
         }),
-        format.errors({ stack: true })
+        format.errors({ stack: true }),
       ),
     }),
   ],

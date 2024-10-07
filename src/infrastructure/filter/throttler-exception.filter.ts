@@ -6,7 +6,7 @@ import { FastifyReply } from 'fastify'; // Asegúrate de importar FastifyReply
 @Catch(ThrottlerException)
 export class ThrottlerExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(ThrottlerExceptionFilter.name);
-  constructor() {} // Inyecta el logger
+  constructor() {}
 
   catch(exception: ThrottlerException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -21,8 +21,7 @@ export class ThrottlerExceptionFilter implements ExceptionFilter {
 
     response.status(status).send({
       statusCode: status,
-      message:
-        'Has excedido el límite de peticiones. Por favor, inténtalo de nuevo más tarde.',
+      message: 'Has excedido el límite de peticiones. Por favor, inténtalo de nuevo más tarde.',
       error: 'Rate Limit Exceeded',
     });
   }

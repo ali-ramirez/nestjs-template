@@ -5,9 +5,9 @@ import { createVitestTestConfig } from './create-vitest-test-config';
 
 export default defineConfig({
   test: createVitestTestConfig('e2e'),
-  plugins: [swc.vite(),tsconfigPaths()],
+  plugins: [swc.vite(), tsconfigPaths()],
   esbuild: {
-    loader: 'tsx', // Usa el cargador de esbuild para TypeScript
+    loader: 'tsx',
     target: 'es2020',
   },
 });

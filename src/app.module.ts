@@ -5,7 +5,7 @@ import { HealthModule } from './infrastructure/health/health.module';
 import { LoggerMidleware } from './infrastructure/midleware/logger/logger.midleware';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-
+import { ObservabilityModule } from './infrastructure/observability/observability.module';
 
 @Module({
   imports: [
@@ -20,10 +20,10 @@ import { APP_GUARD } from '@nestjs/core';
       useFactory: (config: ConfigService) => [
         {
           ttl: parseInt(config.get('THROTTLE_TTL'), 10),
-          limit: parseInt(config.get('THROTTLE_LIMIT'), 10), 
+          limit: parseInt(config.get('THROTTLE_LIMIT'), 10),
           blockDuration: 30000,
           ignoreUserAgents: [],
-          skipIf: (context) => {
+          skipIf: () => {
             return false;
           },
         },
@@ -31,19 +31,18 @@ import { APP_GUARD } from '@nestjs/core';
     }),
     LoggingModule,
     HealthModule,
+    ObservabilityModule,
   ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,  // Usamos ThrottlerGuard o tu AppGuard personalizado
+      useClass: ThrottlerGuard, // Usamos ThrottlerGuard o tu AppGuard personalizado
     },
   ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMidleware)
-      .forRoutes('*');
+    consumer.apply(LoggerMidleware).forRoutes('*');
   }
 }

@@ -1,7 +1,4 @@
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as nock from 'nock';
 import request from 'supertest';
@@ -15,9 +12,7 @@ describe('Health', () => {
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication<NestFastifyApplication>(
-      new FastifyAdapter(),
-    );
+    app = moduleFixture.createNestApplication<NestFastifyApplication>(new FastifyAdapter());
     await app.init();
     await app.getHttpAdapter().getInstance().ready();
     nock.disableNetConnect();
@@ -35,7 +30,11 @@ describe('Health', () => {
 
   it('/GET health', async () => {
     const response = await request(app.getHttpServer()).get('/health');
+
+    // Verificar que el estado de la respuesta es 200
     expect(response.status).toBe(200);
+
+    // Actualizar la estructura de respuesta esperada según el controlador
     expect(response.body).toEqual({
       status: 'ok',
       info: {},

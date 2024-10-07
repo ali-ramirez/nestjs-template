@@ -27,4 +27,3 @@ export class LoggingService {
     logger.verbose(message); // Log de nivel 'verbose'
   }
 }
-
